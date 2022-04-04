@@ -21,20 +21,24 @@ module Omniauth
           expect(subject.options.name).to eq(:france_connect)
         end
 
-        it "returns correct strategy origin_param" do
-          expect(subject.options.origin_param).to eq("redirect_uri")
-        end
         it "returns default undefined site" do
           expect(subject.options.site).to be_nil
         end
+
         it "returns default undefined client_id" do
           expect(subject.options.client_id).to be_nil
         end
+
         it "returns default undefined client_secret" do
           expect(subject.options.client_secret).to be_nil
         end
+
         it "returns default undefined end_session_endpoint" do
           expect(subject.options.end_session_endpoint).to be_nil
+        end
+
+        it "returns list of scope" do
+          expect(subject.options.scope).to eq(%i[openid email preferred_username])
         end
       end
     end
