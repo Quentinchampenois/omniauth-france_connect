@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module Omniauth
+module OmniAuth
   module Strategies
     # FranceConnect Omniauth strategy
-    class FranceConnect < OmniAuth::Strategies::OpenIDConnect
+    class FranceConnect < OpenIDConnect
       option :name, :france_connect
       option :origin_param, "redirect_uri"
 

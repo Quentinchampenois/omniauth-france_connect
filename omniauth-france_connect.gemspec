@@ -4,7 +4,7 @@ require_relative "lib/omniauth/france_connect/version"
 
 Gem::Specification.new do |spec|
   spec.name = "omniauth-france_connect"
-  spec.version = Omniauth::FranceConnect::VERSION
+  spec.version = OmniAuth::FranceConnect::VERSION
   spec.authors = ["quentinchampenois"]
   spec.email = ["26109239+Quentinchampenois@users.noreply.github.com"]
 

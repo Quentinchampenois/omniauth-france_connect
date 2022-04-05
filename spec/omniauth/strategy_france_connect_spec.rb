@@ -6,7 +6,7 @@ class DummyApp
   def call(env); end
 end
 
-module Omniauth
+module OmniAuth
   module Strategies
     RSpec.describe FranceConnect do
       let(:subject) do
