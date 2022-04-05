@@ -11,3 +11,13 @@ Style/StringLiteralsInInterpolation:
 
 Layout/LineLength:
   Max: 120
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/omniauth/strategy_france_connect_spec.rb
+    - lib/omniauth/france_connect.rb
+
+Metrics/AbcSize:
+  Exclude:
+    - lib/omniauth/france_connect.rb
+

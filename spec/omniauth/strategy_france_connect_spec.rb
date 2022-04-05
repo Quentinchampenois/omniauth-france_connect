@@ -14,8 +14,10 @@ module Omniauth
           described_class.new(DummyApp.new).tap do |strategy|
             strategy.options.client_options.identifier = "dummy"
             strategy.options.client_options.secret = "dummy_secret"
+            strategy.options.client_options.redirect_uri = site
           end
         end
+        let(:site) { "https://example.com" }
 
         it "returns correct strategy name" do
           expect(subject.options.name).to eq(:france_connect)
