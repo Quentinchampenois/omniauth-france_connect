@@ -1,20 +1,19 @@
 # frozen_string_literal: true
 
+require "byebug"
 require "omniauth/openid_connect"
 require "omniauth/france_connect/version"
 
 module Omniauth
+  # Implement France Connect Omniauth strategy in your application
   module FranceConnect
+    include ActiveSupport::Configurable
+
     class Error < StandardError; end
 
-    # Override strategy configuration using Core class
-    class Core
-      include ActiveSupport::Configurable
-
-      # Define scope for FranceConnect
-      config_accessor :scope do
-        %i[openid email preferred_username]
-      end
+    # Define scope for FranceConnect
+    config_accessor :scope do
+      %i[openid email preferred_username]
     end
 
     module Strategy
@@ -27,7 +26,7 @@ module Omniauth
         option :client_secret
         option :end_session_endpoint
 
-        option :scope, Omniauth::FranceConnect::Core.scope
+        option :scope, Omniauth::FranceConnect.scope
       end
     end
   end
