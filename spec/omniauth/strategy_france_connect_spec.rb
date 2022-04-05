@@ -7,7 +7,7 @@ class DummyApp
 end
 
 module Omniauth
-  module Strategy
+  module Strategies
     RSpec.describe FranceConnect do
       let(:subject) do
         described_class.new(DummyApp.new).tap do |strategy|

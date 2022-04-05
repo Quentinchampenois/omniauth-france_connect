@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Omniauth
-  module Strategy
+  module Strategies
     # FranceConnect Omniauth strategy
     class FranceConnect < OmniAuth::Strategies::OpenIDConnect
       option :name, :france_connect
