@@ -40,7 +40,7 @@ module OmniAuth
       end
 
       it "returns list of scope" do
-        expect(subject.options.scope).to eq(%i[openid birthdate])
+        expect(subject.options.scope).to eq(%i[openid])
       end
 
       describe "#issuer" do
