@@ -14,6 +14,7 @@ module OmniAuth
           strategy.options.client_options.identifier = "dummy"
           strategy.options.client_options.secret = "dummy_secret"
           strategy.options.client_options.redirect_uri = site
+          strategy.options.site = site
         end
       end
       let(:site) { "https://example.com" }
@@ -22,8 +23,8 @@ module OmniAuth
         expect(subject.options.name).to eq(:france_connect)
       end
 
-      it "returns default undefined site" do
-        expect(subject.options.site).to be_nil
+      it "returns option site" do
+        expect(subject.options.site).to eq(site)
       end
 
       it "returns default undefined client_id" do
@@ -40,6 +41,20 @@ module OmniAuth
 
       it "returns list of scope" do
         expect(subject.options.scope).to eq(%i[openid email preferred_username])
+      end
+
+      describe "#issuer" do
+        let(:subject) do
+          described_class.new(DummyApp.new).tap do |strategy|
+            strategy.options.client_options.identifier = "dummy"
+            strategy.options.client_options.secret = "dummy_secret"
+            strategy.options.site = site
+          end
+        end
+
+        it "returns the site option" do
+          expect(subject.send(:issuer)).to eq(site)
+        end
       end
     end
   end
