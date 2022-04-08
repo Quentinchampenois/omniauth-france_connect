@@ -17,10 +17,6 @@ module OmniAuth
       option :client_auth_method, :body
       option :acr_values, "eidas1"
 
-      def authorize_uri
-        super + (options.acr_values.present? ? "&acr_values=#{options.acr_values}" : "")
-      end
-
       def auth_hash
         hash = super
         hash.logout = end_session_uri
