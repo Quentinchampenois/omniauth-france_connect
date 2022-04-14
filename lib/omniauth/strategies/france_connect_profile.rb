@@ -7,7 +7,7 @@ module OmniAuth
     # FranceConnectProfile allows to connect to France Connect and having multiple personal information
     class FranceConnectProfile < OmniAuth::Strategies::FranceConnect
       option :name, :france_connect_profile
-      option :scope, [:email, :openid, :birthdate, :given_name, :family_name, :preferred_username]
+      option :scope, %i[email openid birthdate given_name family_name]
 
       info do
         {
