@@ -2,12 +2,20 @@
 
 Omniauth FranceConnect is a strategy based on [omniauth_openid_connect gem](https://github.com/omniauth/omniauth_openid_connect). It allows to implement France Connect SSO strategy in your Rails application.  
 
+__Please note you will need France Connect credentials to make it work.__  
+These credentials will include the scope of user information you are authorize to retrieve from this provider.  
+Using a scope with more information than what was originally authorized will throw a __blocking__ error on user authentification.  
+
+Find more information about France Connect at https://partenaires.franceconnect.gouv.fr/fcp/fournisseur-service (French).
+
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```
-gem 'omniauth-openid-connect', git: "https://github.com/OpenSourcePolitics/omniauth-france_connect"
+gem 'omniauth-france_connect', git: "https://github.com/OpenSourcePolitics/omniauth-france_connect"
+gem "omniauth-rails_csrf_protection", "~> 1.0"
+
 ```
 
 And then execute:
@@ -15,15 +23,12 @@ And then execute:
 ```
 bundle install
 ```
-Or install it yourself as:
-
-```
-gem install omniauth-openid-connect
-```
 
 ## Usage
 
 You must create a new initializer under `config/initializers/` named as you want like `omniauth_france_connect.rb`.
+
+__NOTE__: This initializer is made for working with [Decidim](https://github.com/decidim/decidim), you will probably need to update to match your project.
 
 Then add into this file : 
 ```
@@ -40,48 +45,13 @@ if Rails.application.secrets.dig(:omniauth, :france_connect).present?
         env["omniauth.strategy"].options[:client_id] = provider_config[:client_id]
         env["omniauth.strategy"].options[:client_secret] = provider_config[:client_secret]
         env["omniauth.strategy"].options[:site] = provider_config[:site_url]
+        env["omniauth.strategy"].options[:scope] = provider_config[:scope]&.split(" ")
       },
       scope: [:openid, :birthdate]
     )
   end
 end
-
-if Rails.application.secrets.dig(:omniauth, :france_connect_profile).present?
-  Rails.application.config.middleware.use OmniAuth::Builder do
-    provider(
-      :france_connect_profile,
-      setup: setup_provider_proc(:france_connect_profile,
-                                 site: :site,
-                                 client_id: :client_id,
-                                 client_secret: :client_secret,
-                                 end_session_endpoint: :end_session_endpoint,
-                                 icon_path: :icon_path,
-                                 button_path: :button_path,
-                                 provider_name: :provider_name,
-                                 minimum_age: :minimum_age)
-    )
-  end
-end
-
-if Rails.application.secrets.dig(:omniauth, :france_connect_uid).present?
-  Rails.application.config.middleware.use OmniAuth::Builder do
-    provider(
-      :france_connect_uid,
-      setup: setup_provider_proc(:france_connect_uid,
-                                 site: :site,
-                                 client_id: :client_id,
-                                 client_secret: :client_secret,
-                                 end_session_endpoint: :end_session_endpoint,
-                                 icon_path: :icon_path,
-                                 button_path: :button_path,
-                                 provider_name: :provider_name,
-                                 minimum_age: :minimum_age)
-    )
-  end
-end
 ```
-
-__NOTE__: Please note that this initializer is made for working with [Decidim](https://github.com/decidim/decidim), you will probably need to update to match your project.
 
 Then add new keys in your `config/secrets.yml` file like below : 
 ```
@@ -90,29 +60,16 @@ en:
     default:
         omniauth:
             france_connect:
-              enabled: <%= ENV["OMNIAUTH_FC_CLIENT_SECRET"].present? %>
-              client_id: <%= ENV["OMNIAUTH_FC_CLIENT_ID"] %>
-              client_secret: <%= ENV["OMNIAUTH_FC_CLIENT_SECRET"] %>
-              site_url: <%= ENV["OMNIAUTH_FC_SITE_URL"] %>
-            france_connect_profile:
-              enabled: <%= ENV["OMNIAUTH_FRANCE_CONNECT_PROFILE_CLIENT_SECRET"].present? %>
-              provider_name: "France Connect Auteur"
-              client_id: <%= ENV["OMNIAUTH_FRANCE_CONNECT_PROFILE_CLIENT_ID"] %>
-              client_secret: <%= ENV["OMNIAUTH_FRANCE_CONNECT_PROFILE_CLIENT_SECRET"] %>
-              site: <%= ENV["OMNIAUTH_FRANCE_CONNECT_PROFILE_SITE_URL"] %>
-            france_connect_uid:
-              enabled: <%= ENV["OMNIAUTH_FRANCE_CONNECT_UID_CLIENT_SECRET"].present? %>
-              provider_name: "France Connect Signataire"
-              site: <%= ENV["OMNIAUTH_FRANCE_CONNECT_UID_SITE"] %>
-              client_id: <%= ENV["OMNIAUTH_FRANCE_CONNECT_UID_CLIENT_ID"] %>
-              client_secret: <%= ENV["OMNIAUTH_FRANCE_CONNECT_UID_CLIENT_SECRET"] %>
+            enabled: # Save to DB per Organization, can be set in /system interface
+            client_id: # Save to DB per Organization, can be set in /system interface
+            client_secret: # Save to DB per Organization, can be set in /system interface
+            site_url: # Save to DB per Organization, can be set in /system interface
+            scope: # Save to DB per Organization, can be set in /system interface
 ```
 
-As you may have noticed, there is 3 kinds of strategy for France Connect : 
-
-1. `FranceConnect` that allows to log with several informations returned by France Connect
-2. `FranceConnectProfile` that allows to log in with less informations returned by France Connect
-3. `FranceConnectUid` that allows to log in as anonymous. Only UID is stored as nickname.
+If you need a more generic way to configure this strategy please consult : 
+- [OmniAuth::OpenIDConnect documentation](https://github.com/omniauth/omniauth_openid_connect/)
+- or [OmniAuth documentation](https://github.com/omniauth/omniauth)
 
 ## Contributing
 
