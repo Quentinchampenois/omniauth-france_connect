@@ -12,10 +12,43 @@ module OmniAuth
       option :client_secret
       option :end_session_endpoint
 
-      option :scope, %i[openid email preferred_username]
+      option :scope # Array of string or symbol
+
       option :client_signing_alg, :HS256
       option :client_auth_method, :body
       option :acr_values, "eidas1"
+
+      info do
+        {
+          name: fullname,
+          email: raw_info.email,
+          nickname: find_nickname,
+          first_name: raw_info.given_name,
+          last_name: find_name,
+          preferred_username: raw_info.preferred_username,
+          birthdate: raw_info.birthdate,
+          idp_birthdate: raw_info.idp_birthdate,
+          birthplace: raw_info.birthplace,
+          birthcountry: raw_info.birthcountry,
+          gender: raw_info.gender
+        }.compact.transform_values(&:strip)
+      end
+
+      def fullname
+        "#{raw_info.given_name&.split(" ")&.first} #{find_name}"
+      end
+
+      def find_nickname
+        find_name.presence || uid
+      end
+
+      def find_name
+        raw_info.preferred_username.presence || raw_info.family_name
+      end
+
+      def raw_info
+        @raw_info ||= OpenStruct.new(user_info.raw_attributes)
+      end
 
       def auth_hash
         hash = super

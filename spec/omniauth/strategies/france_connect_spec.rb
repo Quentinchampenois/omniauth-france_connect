@@ -14,6 +14,7 @@ module OmniAuth
           strategy.options.client_options.identifier = "dummy"
           strategy.options.client_options.secret = "dummy_secret"
           strategy.options.client_options.redirect_uri = site
+          strategy.options.scope = %i[openid email preferred_username]
           strategy.options.site = site
         end
       end
@@ -48,6 +49,7 @@ module OmniAuth
           described_class.new(DummyApp.new).tap do |strategy|
             strategy.options.client_options.identifier = "dummy"
             strategy.options.client_options.secret = "dummy_secret"
+            strategy.options.scope = %i[openid email preferred_username]
             strategy.options.site = site
           end
         end
