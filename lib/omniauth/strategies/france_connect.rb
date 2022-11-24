@@ -60,7 +60,7 @@ module OmniAuth
         return unless client_options.end_session_endpoint.present?
 
         end_session_uri = URI(options.issuer + client_options.end_session_endpoint)
-        session['omniauth_logout'] = end_session_uri
+        session["omniauth_logout"] = end_session_uri
         end_session_uri.to_s
       end
 
