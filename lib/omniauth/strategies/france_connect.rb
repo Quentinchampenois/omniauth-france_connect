@@ -57,10 +57,13 @@ module OmniAuth
       end
 
       def end_session_uri
-        return unless client_options.end_session_endpoint.present?
+	if client_options.end_session_endpoint.blank?
+          log :debug, "Logout not set, to do so define 'end_session_endpoint'"
+          return
+        end
 
         end_session_uri = URI(options.issuer + client_options.end_session_endpoint)
-        session["omniauth_logout"] = end_session_uri
+        session["omniauth.france_connect.end_session_uri"] = end_session_uri
         end_session_uri.to_s
       end
 
