@@ -57,7 +57,7 @@ module OmniAuth
       end
 
       def end_session_uri
-	if client_options.end_session_endpoint.blank?
+        if client_options.end_session_endpoint.blank?
           log :debug, "Logout not set, to do so define 'end_session_endpoint'"
           return
         end
