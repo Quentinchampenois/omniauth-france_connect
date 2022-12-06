@@ -57,14 +57,13 @@ module OmniAuth
       end
 
       def end_session_uri
-        return unless client_options.end_session_endpoint.present?
+        if client_options.end_session_endpoint.blank?
+          log :debug, "Logout not set, to do so define 'end_session_endpoint'"
+          return
+        end
 
         end_session_uri = URI(options.issuer + client_options.end_session_endpoint)
-        end_session_uri.query = URI.encode_www_form(
-          id_token_hint: credentials[:id_token],
-          state: session_state,
-          post_logout_redirect_uri: "#{full_host}/users/auth/#{options.name}/logout"
-        )
+        session["omniauth.france_connect.end_session_uri"] = end_session_uri
         end_session_uri.to_s
       end
 
@@ -86,13 +85,9 @@ module OmniAuth
           authorization_endpoint: "/api/v1/authorize",
           token_endpoint: "/api/v1/token",
           userinfo_endpoint: "/api/v1/userinfo",
-          jwks_uri: "/api/v1/jwk"
+          jwks_uri: "/api/v1/jwk",
+          end_session_endpoint: "/api/v1/logout"
         }
-
-        if options.end_session_endpoint.present?
-          client_options_hash[:end_session_endpoint] =
-            options.end_session_endpoint
-        end
 
         options.client_options.merge client_options_hash
       end

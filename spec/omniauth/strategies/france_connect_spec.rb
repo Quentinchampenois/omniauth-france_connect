@@ -37,7 +37,7 @@ module OmniAuth
       end
 
       it "returns default undefined end_session_endpoint" do
-        expect(subject.options.end_session_endpoint).to be_nil
+        expect(subject.options.end_session_endpoint).to eq("/api/v1/logout")
       end
 
       it "returns list of scope" do

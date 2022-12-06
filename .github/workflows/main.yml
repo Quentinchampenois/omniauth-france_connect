@@ -5,7 +5,7 @@ on: ["push"]
 jobs:
   lint:
     runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
+    name: Tests (ruby: v${{ matrix.ruby }})
     strategy:
       matrix:
         ruby:
